@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <script type='text/javascript' src='js/vue.js'></script>
+</head>
+
+<body>
+    <div id='app'>
+        {{msg}}
+        <ul>
+            <li v-for="(item, index) in list" :key="index">
+                <input @change='chk' type="checkbox" v-model="item.flag"> ===id: {{item.id}}===单价：{{item.price}}===数量：
+                <input @click='sub(index)' type="button" value='-'>
+                <input v-model.number="item.num" style="width:30px;text-align:center;" type="text" value='1'>
+                <input @click='add(index)' type="button" value='+'></li>
+        </ul>
+        总价：{{total}}===
+
+    </div>
+    <script type='text/javascript'>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'Hello Vue',
+
+                list: [{
+                    id: 1,
+                    price: 10,
+                    num: 1,
+                    flag: false
+                }, {
+                    id: 2,
+                    price: 20,
+                    num: 2,
+                    flag: false
+                }, {
+                    id: 3,
+                    price: 30,
+                    num: 3,
+                    flag: false
+                }, {
+                    id: 4,
+                    price: 40,
+                    num: 4,
+                    flag: false
+                }],
+                total: 0
+            },
+            methods: {
+                chk() {
+                    this.total = 0;
+                    //循环遍历 获取选中状态的元素将价钱叠加
+                    this.list.filter(x => {
+                        if (x.flag) {
+                            return this.total += x.price * x.num
+                        }
+                    })
+                },
+                //点击减号
+                sub(index) {
+                    //如果数量小于等于1 点击减号不继续往下执行
+                    if (this.list[index].num <= 1) {
+                        return
+                    }
+                    //点击减号 数量递减
+                    this.list[index].num--
+                        // 数量递增后重新获取总价钱
+                        this.chk()
+                },
+                //点击加号   根据传过来的参数可以知道点击的是哪个表单
+                add(index) {
+                    //点击加号 数量递增
+                    this.list[index].num++
+                        // 数量递增后重新获取总价钱
+                        this.chk()
+                }
+            },
+            computed: {
+                //通过计算属性监听只要数量发生改变就重新计算总价钱
+                amount() {
+                    return this.chk()
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

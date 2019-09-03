@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <script type='text/javascript' src='js/vue.js'></script>
+</head>
+
+<body>
+    <div id='app'>
+        {{msg}}
+
+        <ul>
+            <li v-for="(item, index) in list" :key="index"><input @change='chk(item.price*item.num,$event)' type="checkbox">===id: {{item.id}}===价格：{{item.price}}===数量：{{item.num}}</li>
+        </ul>
+        总价：{{total}}
+
+    </div>
+    <script type='text/javascript'>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'Hello Vue',
+
+                list: [{
+                    id: 1,
+                    price: 10,
+                    num: 1
+                }, {
+                    id: 2,
+                    price: 20,
+                    num: 2
+                }, {
+                    id: 3,
+                    price: 30,
+                    num: 3
+                }, {
+                    id: 4,
+                    price: 40,
+                    num: 4
+                }],
+                total: 0
+            },
+            methods: {
+                chk(sub, e) {
+                    total = 0;
+                    if (e.target.checked) {
+                        this.total += sub
+                    } else {
+                        this.total -= sub
+                    }
+
+
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

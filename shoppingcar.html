@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>购物车</title>
+    <script type='text/javascript' src='js/vue.js'></script>
+</head>
+
+<body>
+    <div id="app">
+        <div v-if='list.length'>
+            <table border="1" cellspacing="0" cellpadding="0" width="800" style="margin: 0 auto;">
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>商品</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>小计</th>
+                        <th>操作 </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for='(item,index) in list'>
+                        <td>{{index+1}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.price.toFixed(2)}}</td>
+                        <td>
+                            <button @click='decrement(index)' :disabled='item.count === 1'>-</button> {{item.count}}
+                            <button @click='increment(index)'>+</button>
+                        </td>
+                        <td>{{(item.price*item.count).toFixed(2)}}</td>
+                        <td>
+                            <button @click='remove(index)'>移除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" align="right">总价：￥{{(totalPrice).toFixed(2)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div v-else>购物车为空</div>
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                list: [{
+                    id: 1,
+                    name: 'apple',
+                    price: 5.8,
+                    count: 2
+                }, {
+                    id: 2,
+                    name: 'orange',
+                    price: 5.5,
+                    count: 4
+                }, {
+                    id: 1,
+                    name: 'grapes',
+                    price: 9.8,
+                    count: 6
+                }, {
+                    id: 1,
+                    name: 'bananas',
+                    price: 6,
+                    count: 2
+                }]
+            },
+            computed: {
+                totalPrice() {
+                    var total = 0;
+                    for (var i = 0; i < this.list.length; i++) {
+                        total += parseFloat(this.list[i].price) * parseFloat(this.list[i].count)
+                    }
+                    return total;
+                }
+            },
+            methods: {
+                decrement(index) {
+                    if (this.list[index].count === 1) return;
+                    this.list[index].count--;
+                },
+                increment(index) {
+                    this.list[index].count++;
+                },
+                remove(index) {
+                    this.list.splice(index, 1);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
